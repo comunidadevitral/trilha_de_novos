@@ -1,0 +1,73 @@
+---
+import '../styles/global.css';
+---
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><slot name="title" />Trilha de Novos</title>
+    <!-- The Astro built-in head slot -->
+    <slot name="head" />
+  </head>
+  <body class="bg-bg text-text">
+    <header class="border-b border-border">
+      <div class="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-center justify-between py-4">
+          <a href="/" class="text-xl font-heading font-semibold tracking-tight">
+            Trilha de Novos
+          </a>
+          <div class="flex items-center space-x-2">
+            <!-- Placeholder for theme toggle -->
+            <button class="p-2 rounded hover:bg-accent/10 dark:hover:bg-accent/20" id="theme-toggle">
+              🌙
+            </button>
+          </div>
+        </div>
+        <!-- Nav -->
+        <nav class="mt-4 flex flex-wrap space-x-4 text-sm font-medium">
+          <a href="/" class="hover:text-acent">Início</a>
+          <a href="/mapa" class="hover:text-acent">Mapa</a>
+          <a href="/material-de-apoio" class="hover:text-acent">Material de Apoio</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-content px-4 sm:px-6 lg:px-8 py-8">
+      <slot />
+    </main>
+
+    <footer class="border-t border-border mt-12">
+      <div class="mx-auto max-w-container px-4 sm:px-6 lg:px-8 py-6 text-center text-muted">
+        Trilha de Novos · Comunidade Vitral · IPIB São José do Rio Preto
+      </div>
+    </footer>
+
+    <script is:inline>
+      // Simple theme toggle
+      const toggle = document.getElementById('theme-toggle');
+      const root = document.documentElement;
+      const updateIcon = () => {
+        toggle.textContent = root.classList.contains('dark') ? '☀️' : '🌙';
+      };
+      const setTheme = (dark) => {
+        if (dark) {
+          root.classList.add('dark');
+        } else {
+          root.classList.remove('dark');
+        }
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+        updateIcon();
+      };
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        setTheme(true);
+      } else {
+        setTheme(false);
+      }
+      toggle.addEventListener('click', () => {
+        setTheme(!root.classList.contains('dark'));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+---
+import rawHtml from './raw/index.html?raw';
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="index">
+  <div set:html={rawHtml} />
+</Layout>

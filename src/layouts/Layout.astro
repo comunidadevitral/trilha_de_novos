@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+---
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><slot name="title" />Trilha de Novos</title>
+    <!-- The Astro built-in head slot -->
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+    <script is:inline>
+      // Add dark mode toggle button to site-header
+      document.addEventListener('DOMContentLoaded', () => {
+        const header = document.querySelector('.site-header .header-inner');
+        if (!header) return;
+        const btn = document.createElement('button');
+        btn.id = 'theme-toggle';
+        btn.className = 'p-2 rounded hover:bg-accent/10 dark:hover:bg-accent/20';
+        btn.innerHTML = '🌙';
+        // Insert after logo (first child) or before nav? We'll append to header-inner
+        header.appendChild(btn);
+        // Theme toggle logic
+        const root = document.documentElement;
+        const updateIcon = () => {
+          btn.textContent = root.classList.contains('dark') ? '☀️' : '🌙';
+        };
+        const setTheme = (dark) => {
+          if (dark) {
+            root.classList.add('dark');
+          } else {
+            root.classList.remove('dark');
+          }
+          localStorage.setItem('theme', dark ? 'dark' : 'light');
+          updateIcon();
+        };
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          setTheme(true);
+        } else {
+          setTheme(false);
+        };
+        btn.addEventListener('click', () => {
+          setTheme(!root.classList.contains('dark'));
+        });
+      });
+    </script>
+  </body>
+</html>
